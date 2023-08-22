@@ -37,6 +37,18 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/user/update").hasAnyAuthority(SecurityConstants.OPERATOR_ROLE_ID)
                         .requestMatchers(HttpMethod.DELETE, "/api/user/delete/{userID}").hasAnyAuthority(SecurityConstants.OPERATOR_ROLE_ID)
                         .requestMatchers(HttpMethod.GET, "/api/user/get/{userID}").hasAnyAuthority(SecurityConstants.OPERATOR_ROLE_ID)
+
+                        .requestMatchers(HttpMethod.POST, "/api/bin/create").hasAnyAuthority(SecurityConstants.OPERATOR_ROLE_ID)
+                        .requestMatchers(HttpMethod.POST, "/api/bin/update").hasAnyAuthority(SecurityConstants.OPERATOR_ROLE_ID)
+                        .requestMatchers(HttpMethod.DELETE, "/api/bin/delete/{binID}").hasAnyAuthority(SecurityConstants.OPERATOR_ROLE_ID)
+                        .requestMatchers(HttpMethod.GET, "/api/bin/get/{binID}").hasAnyAuthority(SecurityConstants.OPERATOR_ROLE_ID)
+                        .requestMatchers(HttpMethod.GET, "/api/bin/getAll").hasAnyAuthority(SecurityConstants.OPERATOR_ROLE_ID)
+                        .requestMatchers(HttpMethod.POST, "/api/bin/setWaste/{binID}/{sortedWaste}/{unsortedWaste}").hasAnyAuthority(SecurityConstants.OPERATOR_ROLE_ID)
+                        .requestMatchers(HttpMethod.POST, "/api/bin/unload/{binID}").hasAnyAuthority(SecurityConstants.OPERATOR_ROLE_ID)
+
+
+
+
                         .anyRequest().denyAll())
                 .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(
                         jwt -> jwt.jwtAuthenticationConverter(jwtTokenConverter)
