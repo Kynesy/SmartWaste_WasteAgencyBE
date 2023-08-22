@@ -33,7 +33,7 @@ public class UserController {
         User user = fromUserDTOtoUser(userDTO);
 
         int result = userService.createUser(user);
-        if (result == 1) {
+        if (result == 0) {
             return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"User created successfully\"}");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"User creation failed\"}");
@@ -44,7 +44,7 @@ public class UserController {
     public ResponseEntity<String> updateUser(@RequestBody UserDTO userDTO) {
         User user = fromUserDTOtoUser(userDTO);
         int result = userService.updateUser(user);
-        if (result == 1) {
+        if (result == 0) {
             return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"User updated successfully\"}");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"User update failed\"}");
@@ -54,7 +54,7 @@ public class UserController {
     @DeleteMapping("/delete/{userID}")
     public ResponseEntity<String> deleteUser(@PathVariable String userID) {
         int result = userService.deleteUser(userID);
-        if (result == 1) {
+        if (result == 0) {
             return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"User deleted successfully\"}");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"User deletion failed\"}");
