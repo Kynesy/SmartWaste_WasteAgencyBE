@@ -87,7 +87,7 @@ public class UserController {
 
     private UserDTO fromUserToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
+        userDTO.setId(""); //non voglio l'id sia reperibile dal backend
         userDTO.setName(user.getName());
         userDTO.setSurname(user.getSurname());
         userDTO.setEmail(user.getEmail());
