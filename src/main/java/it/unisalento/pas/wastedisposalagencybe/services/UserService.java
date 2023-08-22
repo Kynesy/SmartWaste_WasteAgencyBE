@@ -21,7 +21,7 @@ public class UserService implements IUserService {
     public int createUser(User user) {
         try {
             userRepository.save(user);
-            return 1;  // Return success
+            return 0;  // Return success
         } catch (Exception e) {
             e.printStackTrace();
             return -1; // Return failure
@@ -32,7 +32,7 @@ public class UserService implements IUserService {
     public int updateUser(User user) {
         try {
             userRepository.save(user);
-            return 1;  // Return success
+            return 0;  // Return success
         } catch (Exception e) {
             e.printStackTrace();
             return -1; // Return failure
