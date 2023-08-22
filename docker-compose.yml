@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  wasteDisposalAgencyBE:
+    image: openjdk:17-jdk-alpine
+    container_name: wasteDisposalAgencyBE
+    ports:
+      - "8081:8080"
+      - "8001:8000"
+    expose:
+      - "8000"
+    depends_on:
+      - wasteDisposalAgencyDB
+    networks:
+      - wasteDisposalAgencyNetwork
+    volumes:
+      - ./build/libs/WasteDisposalAgencyBE-0.0.1-SNAPSHOT.jar:/app/app.jar
+    working_dir: /app
+    entrypoint: java -Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000 -jar /app/app.jar
+
+  wasteDisposalAgencyDB:
+    image: mongo:5.0
+    container_name: wasteDisposalAgencyDB
+    ports:
+      - "27018:27017"
+    networks:
+      - wasteDisposalAgencyNetwork
+
+networks:
+  wasteDisposalAgencyNetwork:
+    driver:
+      "bridge"
