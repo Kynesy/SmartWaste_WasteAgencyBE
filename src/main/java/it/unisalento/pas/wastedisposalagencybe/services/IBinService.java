@@ -10,7 +10,4 @@ public interface IBinService {
     int updateBin(Bin bin);
     Bin getBinbyID(String binID);
     ArrayList<Bin> getAllBins();
-    int addWaste(String binID, int sortedWaste, int unsortedWaste);
-    int unloadBin(String binID);
-
 }

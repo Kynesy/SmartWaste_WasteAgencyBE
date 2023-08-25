@@ -44,30 +44,6 @@ public class BinController {
         }
     }
 
-    @PostMapping("/setWaste/{binID}/{sortedWaste}/{unsortedWaste}")
-    public ResponseEntity<String> setWaste(@PathVariable String binID,
-                                           @PathVariable int sortedWaste,
-                                           @PathVariable int unsortedWaste) {
-        int result = binService.addWaste(binID, sortedWaste, unsortedWaste);
-        if (result == 0) {
-            return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"Waste values updated successfully\"}");
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Waste values update failed\"}");
-        }
-    }
-
-    @PostMapping("/unload/{binID}")
-    public ResponseEntity<String> unloadBin(@PathVariable String binID) {
-        int result = binService.unloadBin(binID);
-        if (result == 0) {
-            return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"Bin waste unloaded successfully\"}");
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Bin waste unload failed\"}");
-        }
-    }
-
-
-
     @DeleteMapping("/delete/{binID}")
     public ResponseEntity<String> deleteBin(@PathVariable String binID) {
         int result = binService.deleteBinByID(binID);

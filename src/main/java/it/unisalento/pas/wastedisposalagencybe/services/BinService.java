@@ -69,41 +69,4 @@ public class BinService implements IBinService{
             return null;
         }
     }
-
-    @Override
-    public int addWaste(String binID, int sortedWaste, int unsortedWaste) {
-        try {
-            Bin bin = binRepository.findById(binID).orElse(null);
-            if (bin != null) {
-                bin.setSortedWaste(bin.getSortedWaste() + sortedWaste);
-                bin.setUnsortedWaste(bin.getUnsortedWaste() + unsortedWaste);
-                binRepository.save(bin);
-                return 0;
-            } else {
-                return -1; // Bin not found
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1; // Error occurred
-        }
-    }
-
-    @Override
-    public int unloadBin(String binID){
-        try {
-            Bin bin = binRepository.findById(binID).orElse(null);
-            if (bin != null) {
-                bin.setSortedWaste(0);
-                bin.setUnsortedWaste(0);
-                bin.setAlertLevel(0);
-                binRepository.save(bin);
-                return 0;
-            } else {
-                return -1; // Bin not found
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1; // Error occurred
-        }
-    }
 }
