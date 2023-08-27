@@ -1,5 +1,6 @@
 package it.unisalento.pas.wastedisposalagencybe.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unisalento.pas.wastedisposalagencybe.domains.Bin;
 import it.unisalento.pas.wastedisposalagencybe.domains.CapacityAlert;
@@ -11,6 +12,8 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 public class SubscriberService implements ISubscriberService{
@@ -33,21 +36,27 @@ public class SubscriberService implements ISubscriberService{
 
     @Override
     @RabbitListener(queues="trashNotificationTopic")
-    public void receiveTrashNotification(byte[] payload) {
+    public void receiveTrashNotification(byte[] payload) throws JsonProcessingException {
         String payloadString = new String(payload);
-        System.out.println("Received payload: " + payloadString);
-        System.out.println("Payload type: " + payload.getClass());
+        System.out.println("Received trash payload: " + payloadString);
 
-        // Add your deserialization and processing logic here
+        TrashNotification trashNotification = objectMapper.readValue(payloadString, TrashNotification.class);
+
+        addWaste(trashNotification.getBinId(), trashNotification.getSortedWaste(), trashNotification.getUnsortedWaste());
+        trashNotificationRepository.save(trashNotification);
     }
 
 
     @Override
     @RabbitListener(queues="capacityAlertTopic")
-    public void receiveCapacityAlert(byte[] payload) {
+    public void receiveCapacityAlert(byte[] payload) throws IOException {
         String payloadString = new String(payload);
-        System.out.println("Received payload: " + payloadString);
-        System.out.println("Payload type: " + payload.getClass());
+        System.out.println("Received alert payload: " + payloadString);
+
+        CapacityAlert capacityAlert = objectMapper.readValue(payloadString, CapacityAlert.class);
+        setAlertToBin(capacityAlert.getBinId(), capacityAlert.getAlertLevel());
+
+        capacityAlertRepository.save(capacityAlert);
     }
 
     private void addWaste(String binID, int sortedWaste, int unsortedWaste) {
