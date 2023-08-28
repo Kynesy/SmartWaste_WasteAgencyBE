@@ -8,6 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class WasteStatistics {
+    String userId;
+    int year;
     int totalSortedWaste;
     int totalUnsortedWaste;
 }

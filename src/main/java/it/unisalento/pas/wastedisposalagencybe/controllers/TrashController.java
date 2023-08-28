@@ -39,21 +39,17 @@ public class TrashController {
         return ResponseEntity.ok(trashListDTO);
     }
 
-    @GetMapping("/statistics/user/{userID}")
-    public ResponseEntity<WasteStatisticsDTO> getStatisticsByUserId(@PathVariable String userID){
-        int actualYear = LocalDate.now().getYear();
-        WasteStatistics statistics = trashService.getUserStatistics(userID, actualYear);
-
+    @GetMapping("/statistics/user/{userID}/{year}")
+    public ResponseEntity<WasteStatisticsDTO> getStatisticsByUserId(@PathVariable String userID, @PathVariable int year){
+        WasteStatistics statistics = trashService.getUserStatistics(userID, year);
         WasteStatisticsDTO statisticsDTO = fromStatisticsToStatisticsDTO(statistics);
 
         return ResponseEntity.ok(statisticsDTO);
     }
 
-    @GetMapping("/statistics/city")
-    public ResponseEntity<WasteStatisticsDTO> getCityStatistics(){
-        int actualYear = LocalDate.now().getYear();
-        WasteStatistics statistics = trashService.getCityStatistics(actualYear);
-
+    @GetMapping("/statistics/city/{year}")
+    public ResponseEntity<WasteStatisticsDTO> getCityStatistics(@PathVariable int year){
+        WasteStatistics statistics = trashService.getCityStatistics(year);
         WasteStatisticsDTO statisticsDTO = fromStatisticsToStatisticsDTO(statistics);
 
         return ResponseEntity.ok(statisticsDTO);
@@ -62,6 +58,8 @@ public class TrashController {
     private WasteStatisticsDTO fromStatisticsToStatisticsDTO(WasteStatistics statistics) {
         WasteStatisticsDTO statisticsDTO = new WasteStatisticsDTO();
 
+        statisticsDTO.setUserId(statistics.getUserId());
+        statisticsDTO.setYear(statistics.getYear());
         statisticsDTO.setTotalSortedWaste(statistics.getTotalSortedWaste());
         statisticsDTO.setTotalUnsortedWaste(statistics.getTotalUnsortedWaste());
 

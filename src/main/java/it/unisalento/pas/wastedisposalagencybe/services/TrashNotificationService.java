@@ -27,15 +27,19 @@ public class TrashNotificationService implements ITrashNotificationService {
     @Override
     public WasteStatistics getUserStatistics(String userID, int year) {
         List<TrashNotification> trashNotifications = trashNotificationRepository.findByUserId(userID);
-
-        return sumWastes(trashNotifications);
+        WasteStatistics statistics = sumWastes(trashNotifications);
+        statistics.setUserId(userID);
+        statistics.setYear(year);
+        return statistics;
     }
 
     @Override
     public WasteStatistics getCityStatistics(int year) {
         List<TrashNotification> trashNotifications = trashNotificationRepository.findAll();
+        WasteStatistics statistics = sumWastes(trashNotifications);
+        statistics.setYear(year);
 
-        return sumWastes(trashNotifications);
+        return statistics;
     }
 
     private WasteStatistics sumWastes(List<TrashNotification> trashNotifications){
