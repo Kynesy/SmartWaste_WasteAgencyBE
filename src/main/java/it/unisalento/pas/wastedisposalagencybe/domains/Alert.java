@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CapacityAlert {
+public class Alert {
     @Id private String id;
     @JsonProperty("timestamp")
     private String timestamp;

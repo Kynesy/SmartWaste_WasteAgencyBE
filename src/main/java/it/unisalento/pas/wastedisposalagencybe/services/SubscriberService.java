@@ -3,12 +3,11 @@ package it.unisalento.pas.wastedisposalagencybe.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unisalento.pas.wastedisposalagencybe.domains.Bin;
-import it.unisalento.pas.wastedisposalagencybe.domains.CapacityAlert;
+import it.unisalento.pas.wastedisposalagencybe.domains.Alert;
 import it.unisalento.pas.wastedisposalagencybe.domains.TrashNotification;
 import it.unisalento.pas.wastedisposalagencybe.repositories.IBinRepository;
-import it.unisalento.pas.wastedisposalagencybe.repositories.ICapacityAlertRepository;
+import it.unisalento.pas.wastedisposalagencybe.repositories.IAlertRepository;
 import it.unisalento.pas.wastedisposalagencybe.repositories.ITrashNotificationRepository;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,14 +16,14 @@ import java.io.IOException;
 
 @Service
 public class SubscriberService implements ISubscriberService{
-    private final ICapacityAlertRepository capacityAlertRepository;
+    private final IAlertRepository capacityAlertRepository;
     private final ITrashNotificationRepository trashNotificationRepository;
     private final IBinRepository binRepository;
     private final ObjectMapper objectMapper; // Jackson ObjectMapper for JSON serialization/deserialization
 
     @Autowired
     public SubscriberService(
-            ICapacityAlertRepository capacityAlertRepository,
+            IAlertRepository capacityAlertRepository,
             ITrashNotificationRepository trashNotificationRepository,
             IBinRepository binRepository, ObjectMapper objectMapper
     ) {
@@ -53,10 +52,10 @@ public class SubscriberService implements ISubscriberService{
         String payloadString = new String(payload);
         System.out.println("Received alert payload: " + payloadString);
 
-        CapacityAlert capacityAlert = objectMapper.readValue(payloadString, CapacityAlert.class);
-        setAlertToBin(capacityAlert.getBinId(), capacityAlert.getAlertLevel());
+        Alert alert = objectMapper.readValue(payloadString, Alert.class);
+        setAlertToBin(alert.getBinId(), alert.getAlertLevel());
 
-        capacityAlertRepository.save(capacityAlert);
+        capacityAlertRepository.save(alert);
     }
 
     private void addWaste(String binID, int sortedWaste, int unsortedWaste) {

@@ -1,8 +1,8 @@
 package it.unisalento.pas.wastedisposalagencybe.controllers;
 
-import it.unisalento.pas.wastedisposalagencybe.domains.CapacityAlert;
+import it.unisalento.pas.wastedisposalagencybe.domains.Alert;
 import it.unisalento.pas.wastedisposalagencybe.dto.CapacityAlertDTO;
-import it.unisalento.pas.wastedisposalagencybe.services.ICapacityAlertService;
+import it.unisalento.pas.wastedisposalagencybe.services.IAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,19 +14,19 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/api/alert")
 public class AlertController {
-    private final ICapacityAlertService alertService;
+    private final IAlertService alertService;
 
     @Autowired
-    public AlertController(ICapacityAlertService alertService) {
+    public AlertController(IAlertService alertService) {
         this.alertService = alertService;
     }
 
     @GetMapping("/getAll")
     public ResponseEntity<ArrayList<CapacityAlertDTO>> getAllCapacityAlerts(){
-        ArrayList<CapacityAlert> alertList = alertService.getAllAlerts();
+        ArrayList<Alert> alertList = alertService.getAllAlerts();
         ArrayList<CapacityAlertDTO> alertListDTO = new ArrayList<>();
 
-        for(CapacityAlert alert: alertList){
+        for(Alert alert: alertList){
             CapacityAlertDTO alertDTO = fromAlertToAlertDTO(alert);
             alertListDTO.add(alertDTO);
         }
@@ -34,7 +34,7 @@ public class AlertController {
         return ResponseEntity.ok(alertListDTO);
     }
 
-    private CapacityAlertDTO fromAlertToAlertDTO(CapacityAlert alert) {
+    private CapacityAlertDTO fromAlertToAlertDTO(Alert alert) {
         CapacityAlertDTO alertDTO = new CapacityAlertDTO();
 
         alertDTO.setId(alert.getId());
