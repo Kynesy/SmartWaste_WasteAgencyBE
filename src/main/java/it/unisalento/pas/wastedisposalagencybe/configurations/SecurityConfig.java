@@ -50,7 +50,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/trash/statistics/user/{userID}").hasAnyAuthority(SecurityConstants.USER_ROLE_ID, SecurityConstants.ADMIN_ROLE_ID)
                         .requestMatchers(HttpMethod.GET, "/api/trash/statistics/city").hasAnyAuthority(SecurityConstants.ADMIN_ROLE_ID)
 
-                        .requestMatchers(HttpMethod.GET, "/api/alert/getAll").hasAnyAuthority(SecurityConstants.ADMIN_ROLE_ID)
+                        .requestMatchers(HttpMethod.GET, "/api/alert/getAll").hasAnyAuthority(SecurityConstants.OPERATOR_ROLE_ID)
 
                         .anyRequest().denyAll())
                 .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(
