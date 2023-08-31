@@ -17,7 +17,6 @@ public class JwtTokenConverter implements Converter<Jwt, AbstractAuthenticationT
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
         Collection<GrantedAuthority> authorities = extractRole(jwt.getClaims());
-
         return new JwtAuthenticationToken(jwt, authorities);
     }
 

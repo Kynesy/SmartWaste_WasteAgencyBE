@@ -47,8 +47,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/bin/getAll").hasAnyAuthority(SecurityConstants.OPERATOR_ROLE_ID)
 
                         .requestMatchers(HttpMethod.GET, "/api/trash/notifications/user/{userID}").hasAnyAuthority(SecurityConstants.USER_ROLE_ID)
-                        .requestMatchers(HttpMethod.GET, "/api/trash/statistics/user/{userID}").hasAnyAuthority(SecurityConstants.USER_ROLE_ID, SecurityConstants.ADMIN_ROLE_ID)
-                        .requestMatchers(HttpMethod.GET, "/api/trash/statistics/city").hasAnyAuthority(SecurityConstants.ADMIN_ROLE_ID)
+
+                        .requestMatchers(HttpMethod.GET, "/api/trash/statistics/user/{userID}/{year}").hasAnyAuthority(SecurityConstants.USER_ROLE_ID, SecurityConstants.ADMIN_ROLE_ID)
+                        .requestMatchers(HttpMethod.POST, "/api/trash/statistics/user/all/{year}").hasAnyAuthority(SecurityConstants.ADMIN_ROLE_ID)
+                        .requestMatchers(HttpMethod.GET, "/api/trash/statistics/city/{year}").hasAnyAuthority(SecurityConstants.ADMIN_ROLE_ID)
 
                         .requestMatchers(HttpMethod.GET, "/api/alert/getAll").hasAnyAuthority(SecurityConstants.OPERATOR_ROLE_ID)
 

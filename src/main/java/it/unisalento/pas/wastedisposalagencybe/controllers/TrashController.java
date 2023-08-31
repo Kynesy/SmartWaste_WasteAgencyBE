@@ -7,10 +7,7 @@ import it.unisalento.pas.wastedisposalagencybe.dto.WasteStatisticsDTO;
 import it.unisalento.pas.wastedisposalagencybe.services.ITrashNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -45,6 +42,19 @@ public class TrashController {
         WasteStatisticsDTO statisticsDTO = fromStatisticsToStatisticsDTO(statistics);
 
         return ResponseEntity.ok(statisticsDTO);
+    }
+
+    @PostMapping("/statistics/user/all/{year}")
+    public ResponseEntity<ArrayList<WasteStatisticsDTO>> getStatisticsByUserId(@RequestBody ArrayList<String> idList, @PathVariable int year){
+        ArrayList<WasteStatisticsDTO> statListDTO = new ArrayList<>();
+        for (String id :
+                idList) {
+            WasteStatistics statistics = trashService.getUserStatistics(id, year);
+            WasteStatisticsDTO statisticsDTO = fromStatisticsToStatisticsDTO(statistics);
+            statListDTO.add(statisticsDTO);
+        }
+
+        return ResponseEntity.ok(statListDTO);
     }
 
     @GetMapping("/statistics/city/{year}")
