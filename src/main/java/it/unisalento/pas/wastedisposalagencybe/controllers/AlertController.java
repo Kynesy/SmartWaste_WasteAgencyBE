@@ -1,7 +1,7 @@
 package it.unisalento.pas.wastedisposalagencybe.controllers;
 
 import it.unisalento.pas.wastedisposalagencybe.domains.Alert;
-import it.unisalento.pas.wastedisposalagencybe.dto.CapacityAlertDTO;
+import it.unisalento.pas.wastedisposalagencybe.dto.AlertDTO;
 import it.unisalento.pas.wastedisposalagencybe.services.IAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 
+/**
+ * Controller che gestisce le operazioni relative alle notifiche di allarme (alert).
+ */
 @RestController
 @RequestMapping("/api/alert")
 public class AlertController {
@@ -21,21 +24,32 @@ public class AlertController {
         this.alertService = alertService;
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<ArrayList<CapacityAlertDTO>> getAllCapacityAlerts(){
+    /**
+     * Ottiene tutte le notifiche di allarme di capacità.
+     *
+     * @return ResponseEntity con lo stato HTTP OK e una lista di notifiche di allarme in formato JSON
+     */
+    @GetMapping("/get/all")
+    public ResponseEntity<ArrayList<AlertDTO>> getAllCapacityAlerts() {
         ArrayList<Alert> alertList = alertService.getAllAlerts();
-        ArrayList<CapacityAlertDTO> alertListDTO = new ArrayList<>();
+        ArrayList<AlertDTO> alertListDTO = new ArrayList<>();
 
-        for(Alert alert: alertList){
-            CapacityAlertDTO alertDTO = fromAlertToAlertDTO(alert);
+        for (Alert alert : alertList) {
+            AlertDTO alertDTO = fromAlertToAlertDTO(alert);
             alertListDTO.add(alertDTO);
         }
 
         return ResponseEntity.ok(alertListDTO);
     }
 
-    private CapacityAlertDTO fromAlertToAlertDTO(Alert alert) {
-        CapacityAlertDTO alertDTO = new CapacityAlertDTO();
+    /**
+     * Converte un oggetto Alert in un oggetto AlertDTO.
+     *
+     * @param alert Oggetto Alert da convertire
+     * @return Oggetto AlertDTO convertito
+     */
+    private AlertDTO fromAlertToAlertDTO(Alert alert) {
+        AlertDTO alertDTO = new AlertDTO();
 
         alertDTO.setId(alert.getId());
         alertDTO.setTimestamp(alert.getTimestamp());
@@ -44,7 +58,4 @@ public class AlertController {
 
         return alertDTO;
     }
-
 }
-
-

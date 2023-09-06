@@ -1,6 +1,7 @@
 version: "3"
 
 services:
+  # container di RabbitMQ
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq
@@ -13,6 +14,7 @@ services:
     networks:
       - wasteDisposalAgencyNetwork
 
+  # container del backend dell'agenzia rifiuti
   wasteDisposalAgencyBE:
     image: openjdk:17-jdk-alpine
     container_name: wasteDisposalAgencyBE
@@ -30,6 +32,7 @@ services:
     working_dir: /app
     entrypoint: java -Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000 -jar /app/app.jar
 
+  # container del database dell'agenzia rifiuti
   wasteDisposalAgencyDB:
     image: mongo:5.0
     container_name: wasteDisposalAgencyDB
@@ -38,6 +41,7 @@ services:
     networks:
       - wasteDisposalAgencyNetwork
 
+# rete interna dell'agenzia rifiuti
 networks:
   wasteDisposalAgencyNetwork:
     driver:

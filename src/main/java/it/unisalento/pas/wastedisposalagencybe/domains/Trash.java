@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TrashNotification {
+public class Trash {
     @Id
     private String id;
     @JsonProperty("timestamp")

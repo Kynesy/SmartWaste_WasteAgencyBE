@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+/**
+ * Controller che gestisce le operazioni relative ai contenitori (bin).
+ */
 @RestController
 @RequestMapping("/api/bin")
 public class BinController {
@@ -20,6 +23,13 @@ public class BinController {
         this.binService = binService;
     }
 
+    /**
+     * Crea un nuovo contenitore (bin) con i dati forniti.
+     *
+     * @param binDTO Dati del contenitore (bin) da creare
+     * @return ResponseEntity con stato HTTP OK e un messaggio JSON se il bin è stato creato con successo,
+     * altrimenti INTERNAL_SERVER_ERROR
+     */
     @PostMapping("/create")
     public ResponseEntity<String> createBin(@RequestBody BinDTO binDTO){
         Bin bin = fromBinDTOtoBin(binDTO);
@@ -32,6 +42,13 @@ public class BinController {
         }
     }
 
+    /**
+     * Aggiorna un contenitore (bin) esistente con i dati forniti.
+     *
+     * @param binDTO Dati del contenitore (bin) da aggiornare
+     * @return ResponseEntity con stato HTTP OK e un messaggio JSON se il bin è stato aggiornato con successo,
+     * altrimenti INTERNAL_SERVER_ERROR
+     */
     @PostMapping("/update")
     public ResponseEntity<String> updateBin(@RequestBody BinDTO binDTO) {
         Bin bin = fromBinDTOtoBin(binDTO);
@@ -44,6 +61,13 @@ public class BinController {
         }
     }
 
+    /**
+     * Elimina un contenitore (bin) con l'ID specificato.
+     *
+     * @param binID ID del contenitore (bin) da eliminare
+     * @return ResponseEntity con stato HTTP OK e un messaggio JSON se il bin è stato eliminato con successo,
+     * altrimenti INTERNAL_SERVER_ERROR
+     */
     @DeleteMapping("/delete/{binID}")
     public ResponseEntity<String> deleteBin(@PathVariable String binID) {
         int result = binService.deleteBinByID(binID);
@@ -54,6 +78,13 @@ public class BinController {
         }
     }
 
+    /**
+     * Ottiene un contenitore (bin) con l'ID specificato.
+     *
+     * @param binID ID del contenitore (bin) da ottenere
+     * @return ResponseEntity con stato HTTP OK e il corpo JSON del bin se trovato,
+     * altrimenti NOT_FOUND
+     */
     @GetMapping("/get/{binID}")
     public ResponseEntity<BinDTO> getBin(@PathVariable String binID) {
         Bin bin = binService.getBinbyID(binID);
@@ -66,7 +97,13 @@ public class BinController {
         }
     }
 
-    @GetMapping("/getAll")
+    /**
+     * Ottiene tutti i contenitori (bin) presenti nel sistema.
+     *
+     * @return ResponseEntity con stato HTTP OK e un elenco di bin in formato JSON se trovati,
+     * altrimenti NOT_FOUND
+     */
+    @GetMapping("/get/all")
     public ResponseEntity<ArrayList<BinDTO>> getAllBins() {
         ArrayList<Bin> binList = binService.getAllBins();
         ArrayList<BinDTO> binDTOList = new ArrayList<>();
@@ -81,6 +118,12 @@ public class BinController {
         }
     }
 
+    /**
+     * Converte un oggetto Bin in un oggetto BinDTO.
+     *
+     * @param bin Oggetto Bin da convertire
+     * @return Oggetto BinDTO convertito
+     */
     private BinDTO fromBinToBinDTO(Bin bin) {
         BinDTO binDTO = new BinDTO();
 
@@ -95,7 +138,12 @@ public class BinController {
         return binDTO;
     }
 
-
+    /**
+     * Converte un oggetto BinDTO in un oggetto Bin.
+     *
+     * @param binDTO Oggetto BinDTO da convertire
+     * @return Oggetto Bin convertito
+     */
     private Bin fromBinDTOtoBin(BinDTO binDTO) {
         Bin bin = new Bin();
 

@@ -11,8 +11,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * Questo convertitore converte un oggetto Jwt in un oggetto AbstractAuthenticationToken.
+ * Estrae il ruolo (claim "role") dal token JWT e crea un oggetto SimpleGrantedAuthority.
+ * Utilizzato per l'autenticazione JWT.
+ */
 public class JwtTokenConverter implements Converter<Jwt, AbstractAuthenticationToken> {
-    private static final String CLAIM_ROLE = "role"; // The key for the role claim in the JWT
+    private static final String CLAIM_ROLE = "role"; // Chiave per il claim del ruolo nel JWT
 
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
@@ -20,6 +25,12 @@ public class JwtTokenConverter implements Converter<Jwt, AbstractAuthenticationT
         return new JwtAuthenticationToken(jwt, authorities);
     }
 
+    /**
+     * Estrae il ruolo dal claim del token JWT e lo converte in un oggetto GrantedAuthority.
+     *
+     * @param claims Map contenente i claims del JWT
+     * @return Una collezione di autorizzazioni (GrantedAuthority)
+     */
     private Collection<GrantedAuthority> extractRole(Map<String, Object> claims) {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
 

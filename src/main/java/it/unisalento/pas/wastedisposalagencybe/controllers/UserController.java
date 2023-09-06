@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller che gestisce le operazioni relative agli utenti.
+ */
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -19,15 +22,28 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * Verifica l'esistenza di un utente con l'ID specificato.
+     *
+     * @param userID ID dell'utente da verificare
+     * @return ResponseEntity con stato HTTP OK e corpo true se l'utente esiste, altrimenti NOT_FOUND e false
+     */
     @GetMapping("/exist/{userID}")
     public ResponseEntity<Boolean> existUser(@PathVariable String userID) {
-        if(userService.existUser(userID)==1){
+        if (userService.existUser(userID) == 1) {
             return ResponseEntity.status(HttpStatus.OK).body(true);
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
         }
     }
 
+    /**
+     * Crea un nuovo utente con i dati forniti.
+     *
+     * @param userDTO Dati dell'utente da creare
+     * @return ResponseEntity con stato HTTP OK e un messaggio JSON se l'utente è stato creato con successo,
+     * altrimenti INTERNAL_SERVER_ERROR
+     */
     @PostMapping("/create")
     public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO) {
         User user = fromUserDTOtoUser(userDTO);
@@ -40,6 +56,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Aggiorna un utente esistente con i dati forniti.
+     *
+     * @param userDTO Dati dell'utente da aggiornare
+     * @return ResponseEntity con stato HTTP OK e un messaggio JSON se l'utente è stato aggiornato con successo,
+     * altrimenti INTERNAL_SERVER_ERROR
+     */
     @PostMapping("/update")
     public ResponseEntity<String> updateUser(@RequestBody UserDTO userDTO) {
         User user = fromUserDTOtoUser(userDTO);
@@ -51,6 +74,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Elimina un utente con l'ID specificato.
+     *
+     * @param userID ID dell'utente da eliminare
+     * @return ResponseEntity con stato HTTP OK e un messaggio JSON se l'utente è stato eliminato con successo,
+     * altrimenti INTERNAL_SERVER_ERROR
+     */
     @DeleteMapping("/delete/{userID}")
     public ResponseEntity<String> deleteUser(@PathVariable String userID) {
         int result = userService.deleteUser(userID);
@@ -61,6 +91,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Ottiene un utente con l'ID specificato.
+     *
+     * @param userID ID dell'utente da ottenere
+     * @return ResponseEntity con lo stato HTTP OK e il corpo JSON dell'utente se trovato,
+     * altrimenti NOT_FOUND
+     */
     @GetMapping("/get/{userID}")
     public ResponseEntity<UserDTO> getUser(@PathVariable String userID) {
         User user = userService.findByID(userID);
@@ -73,7 +110,12 @@ public class UserController {
         }
     }
 
-    // MAPPING
+    /**
+     * Converte un oggetto UserDTO in un oggetto User.
+     *
+     * @param userDTO Oggetto UserDTO da convertire
+     * @return Oggetto User convertito
+     */
     private User fromUserDTOtoUser(UserDTO userDTO) {
         User user = new User();
         user.setId(userDTO.getId());
@@ -85,9 +127,15 @@ public class UserController {
         return user;
     }
 
+    /**
+     * Converte un oggetto User in un oggetto UserDTO.
+     *
+     * @param user Oggetto User da convertire
+     * @return Oggetto UserDTO convertito
+     */
     private UserDTO fromUserToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(""); //non voglio l'id sia reperibile dal backend
+        userDTO.setId(""); // Non voglio che l'ID sia reperibile dal backend
         userDTO.setName(user.getName());
         userDTO.setSurname(user.getSurname());
         userDTO.setEmail(user.getEmail());
