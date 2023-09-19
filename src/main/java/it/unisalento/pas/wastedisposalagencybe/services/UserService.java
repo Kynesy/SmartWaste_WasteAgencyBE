@@ -72,15 +72,15 @@ public class UserService implements IUserService {
     }
 
     /**
-     * Verifica se un utente con l'email specificata esiste nel sistema.
+     * Verifica se un utente con l'id specificata esiste nel sistema.
      *
-     * @param email L'email dell'utente da verificare
+     * @param id L'id dell'utente da verificare
      * @return 1 se l'utente esiste, 0 se non esiste, -1 in caso di errore
      */
     @Override
-    public int existUser(String email) {
+    public int existUser(String id) {
         try {
-            Optional<User> existingUser = userRepository.findByEmail(email);
+            Optional<User> existingUser = userRepository.findById(id);
             return existingUser.isPresent() ? 1 : 0;  // Restituisce 1 se l'utente esiste, 0 altrimenti
         } catch (Exception e) {
             e.printStackTrace();
