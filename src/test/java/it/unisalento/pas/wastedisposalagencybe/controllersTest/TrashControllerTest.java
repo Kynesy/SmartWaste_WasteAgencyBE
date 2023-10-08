@@ -57,6 +57,8 @@ public class TrashControllerTest {
         WasteStatisticsDTO statisticsDTO = new WasteStatisticsDTO();
         statisticsDTO.setUserId(userID);
         statisticsDTO.setYear(year);
+        statisticsDTO.setTotalSortedWaste(200);
+        statisticsDTO.setTotalUnsortedWaste(200);
 
         when(trashService.getUserStatistics(userID, year)).thenReturn(new WasteStatistics());
 
