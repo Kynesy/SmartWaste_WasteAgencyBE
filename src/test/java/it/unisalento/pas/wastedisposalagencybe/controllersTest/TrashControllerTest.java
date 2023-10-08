@@ -54,13 +54,13 @@ public class TrashControllerTest {
     void getStatisticsByUserIdTest() throws Exception {
         String userID = "mockUserID";
         int year = 2023;
-        WasteStatisticsDTO statisticsDTO = new WasteStatisticsDTO();
-        statisticsDTO.setUserId(userID);
-        statisticsDTO.setYear(year);
-        statisticsDTO.setTotalSortedWaste(200);
-        statisticsDTO.setTotalUnsortedWaste(200);
+        WasteStatistics statistics = new WasteStatistics();
+        statistics.setUserId(userID);
+        statistics.setYear(year);
+        statistics.setTotalSortedWaste(200);
+        statistics.setTotalUnsortedWaste(200);
 
-        when(trashService.getUserStatistics(userID, year)).thenReturn(new WasteStatistics());
+        when(trashService.getUserStatistics(userID, year)).thenReturn(statistics);
 
         mockMvc.perform(get("/api/trash/statistics/user/{userID}/{year}", userID, year)
                         .with(user("user").authorities(new SimpleGrantedAuthority(SecurityConstants.USER_ROLE_ID))))
@@ -74,13 +74,13 @@ public class TrashControllerTest {
         ArrayList<String> userIdList = new ArrayList<>();
         userIdList.add("mockUserID");
         int year = 2023;
-        ArrayList<WasteStatisticsDTO> statListDTO = new ArrayList<>();
-        WasteStatisticsDTO statisticsDTO = new WasteStatisticsDTO();
-        statisticsDTO.setUserId("mockUserID");
-        statisticsDTO.setYear(year);
-        statListDTO.add(statisticsDTO);
+        ArrayList<WasteStatistics> statList = new ArrayList<>();
+        WasteStatistics statistics = new WasteStatistics();
+        statistics.setUserId("mockUserID");
+        statistics.setYear(year);
+        statList.add(statistics);
 
-        when(trashService.getUserStatistics("mockUserID", year)).thenReturn(new WasteStatistics());
+        when(trashService.getUserStatistics("mockUserID", year)).thenReturn(statistics);
 
         Gson gson = new Gson();
         String json = gson.toJson(userIdList);
