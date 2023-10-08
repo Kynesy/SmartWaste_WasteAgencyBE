@@ -1,0 +1,101 @@
+package it.unisalento.pas.wastedisposalagencybe.controllersTest;
+
+import com.nimbusds.jose.shaded.gson.Gson;
+import it.unisalento.pas.wastedisposalagencybe.controllers.TrashController;
+import it.unisalento.pas.wastedisposalagencybe.domains.Trash;
+import it.unisalento.pas.wastedisposalagencybe.domains.WasteStatistics;
+import it.unisalento.pas.wastedisposalagencybe.dto.TrashDTO;
+import it.unisalento.pas.wastedisposalagencybe.dto.WasteStatisticsDTO;
+import it.unisalento.pas.wastedisposalagencybe.services.ITrashService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+public class TrashControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private ITrashService trashService;
+
+    @Test
+    void getTrashByUserIdTest() throws Exception {
+        String userID = "mockUserID";
+        ArrayList<Trash> trashList = new ArrayList<>();
+        Trash trash = new Trash();
+        trash.setId("mockID");
+        trashList.add(trash);
+
+        when(trashService.getTrashNotificationByUserID(userID)).thenReturn(trashList);
+
+        mockMvc.perform(get("/api/trash/notifications/user/{userID}", userID))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value("mockID"));
+    }
+
+    @Test
+    void getStatisticsByUserIdTest() throws Exception {
+        String userID = "mockUserID";
+        int year = 2023;
+        WasteStatisticsDTO statisticsDTO = new WasteStatisticsDTO();
+        statisticsDTO.setUserId(userID);
+        statisticsDTO.setYear(year);
+
+        when(trashService.getUserStatistics(userID, year)).thenReturn(new WasteStatistics());
+
+        mockMvc.perform(get("/api/trash/statistics/user/{userID}/{year}", userID, year))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userId").value(userID))
+                .andExpect(jsonPath("$.year").value(year));
+    }
+
+    @Test
+    void getStatisticsByUserIdListTest() throws Exception {
+        ArrayList<String> userIdList = new ArrayList<>();
+        userIdList.add("mockUserID");
+        int year = 2023;
+        ArrayList<WasteStatisticsDTO> statListDTO = new ArrayList<>();
+        WasteStatisticsDTO statisticsDTO = new WasteStatisticsDTO();
+        statisticsDTO.setUserId("mockUserID");
+        statisticsDTO.setYear(year);
+        statListDTO.add(statisticsDTO);
+
+        when(trashService.getUserStatistics("mockUserID", year)).thenReturn(new WasteStatistics());
+
+        Gson gson = new Gson();
+        String json = gson.toJson(userIdList);
+
+        mockMvc.perform(post("/api/trash/statistics/user/all/{year}", year)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].userId").value("mockUserID"))
+                .andExpect(jsonPath("$[0].year").value(year));
+    }
+
+    @Test
+    void getCityStatisticsTest() throws Exception {
+        int year = 2023;
+        WasteStatisticsDTO statisticsDTO = new WasteStatisticsDTO();
+        statisticsDTO.setYear(year);
+
+        when(trashService.getCityStatistics(year)).thenReturn(new WasteStatistics());
+
+        mockMvc.perform(get("/api/trash/statistics/city/{year}", year))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.year").value(year));
+    }
+}
