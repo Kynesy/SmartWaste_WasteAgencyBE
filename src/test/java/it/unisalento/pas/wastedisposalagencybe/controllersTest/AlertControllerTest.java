@@ -1,6 +1,7 @@
 package it.unisalento.pas.wastedisposalagencybe.controllersTest;
 
 import com.nimbusds.jose.shaded.gson.Gson;
+import it.unisalento.pas.wastedisposalagencybe.configurations.SecurityConstants;
 import it.unisalento.pas.wastedisposalagencybe.controllers.AlertController;
 import it.unisalento.pas.wastedisposalagencybe.domains.Alert;
 import it.unisalento.pas.wastedisposalagencybe.dto.AlertDTO;
@@ -10,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -40,7 +43,8 @@ public class AlertControllerTest {
 
         when(alertService.getAllAlerts()).thenReturn(alertList);
 
-        mockMvc.perform(get("/api/alert/get/all"))
+        mockMvc.perform(get("/api/alert/get/all")
+                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("mockAlertID"))
                 .andExpect(jsonPath("$[0].timestamp").value("2023-10-06T10:00:00Z"))

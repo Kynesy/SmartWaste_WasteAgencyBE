@@ -1,6 +1,7 @@
 package it.unisalento.pas.wastedisposalagencybe.controllersTest;
 
 import com.nimbusds.jose.shaded.gson.Gson;
+import it.unisalento.pas.wastedisposalagencybe.configurations.SecurityConstants;
 import it.unisalento.pas.wastedisposalagencybe.domains.Bin;
 import it.unisalento.pas.wastedisposalagencybe.dto.BinDTO;
 import it.unisalento.pas.wastedisposalagencybe.services.IBinService;
@@ -10,11 +11,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -39,7 +42,8 @@ public class BinControllerTest {
 
         mockMvc.perform(post("/api/bin/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"message\": \"Bin created successfully\"}"));
     }
@@ -55,7 +59,8 @@ public class BinControllerTest {
 
         mockMvc.perform(post("/api/bin/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().json("{\"message\": \"Bin creation failed\"}"));
     }
@@ -71,7 +76,8 @@ public class BinControllerTest {
 
         mockMvc.perform(post("/api/bin/update")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"message\": \"Bin updated successfully\"}"));
     }
@@ -87,7 +93,8 @@ public class BinControllerTest {
 
         mockMvc.perform(post("/api/bin/update")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().json("{\"message\": \"Bin update failed\"}"));
     }
@@ -97,7 +104,8 @@ public class BinControllerTest {
         String binID = "mockID";
         when(binService.deleteBinByID(binID)).thenReturn(0);
 
-        mockMvc.perform(delete("/api/bin/delete/{binID}", binID))
+        mockMvc.perform(delete("/api/bin/delete/{binID}", binID)
+                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"message\": \"Bin deleted successfully\"}"));
     }
@@ -107,7 +115,8 @@ public class BinControllerTest {
         String binID = "mockID";
         when(binService.deleteBinByID(binID)).thenReturn(1);
 
-        mockMvc.perform(delete("/api/bin/delete/{binID}", binID))
+        mockMvc.perform(delete("/api/bin/delete/{binID}", binID)
+                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().json("{\"message\": \"Bin deletion failed\"}"));
     }
@@ -120,7 +129,8 @@ public class BinControllerTest {
 
         when(binService.getBinbyID(binID)).thenReturn(bin);
 
-        mockMvc.perform(get("/api/bin/get/{binID}", binID))
+        mockMvc.perform(get("/api/bin/get/{binID}", binID)
+                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("mockID"));
     }
@@ -130,7 +140,8 @@ public class BinControllerTest {
         String binID = "mockID";
         when(binService.getBinbyID(binID)).thenReturn(null);
 
-        mockMvc.perform(get("/api/bin/get/{binID}", binID))
+        mockMvc.perform(get("/api/bin/get/{binID}", binID)
+                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
                 .andExpect(status().isNotFound());
     }
 
@@ -143,7 +154,8 @@ public class BinControllerTest {
 
         when(binService.getAllBins()).thenReturn(binList);
 
-        mockMvc.perform(get("/api/bin/get/all"))
+        mockMvc.perform(get("/api/bin/get/all")
+                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("mockID"));
     }
