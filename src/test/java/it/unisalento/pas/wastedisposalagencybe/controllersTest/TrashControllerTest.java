@@ -97,10 +97,10 @@ public class TrashControllerTest {
     @Test
     void getCityStatisticsTest() throws Exception {
         int year = 2023;
-        WasteStatisticsDTO statisticsDTO = new WasteStatisticsDTO();
-        statisticsDTO.setYear(year);
+        WasteStatistics statistics = new WasteStatistics();
+        statistics.setYear(year);
 
-        when(trashService.getCityStatistics(year)).thenReturn(new WasteStatistics());
+        when(trashService.getCityStatistics(year)).thenReturn(statistics);
 
         mockMvc.perform(get("/api/trash/statistics/city/{year}", year)
                         .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
