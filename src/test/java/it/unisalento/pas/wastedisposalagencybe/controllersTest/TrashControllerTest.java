@@ -2,11 +2,8 @@ package it.unisalento.pas.wastedisposalagencybe.controllersTest;
 
 import com.nimbusds.jose.shaded.gson.Gson;
 import it.unisalento.pas.wastedisposalagencybe.configurations.SecurityConstants;
-import it.unisalento.pas.wastedisposalagencybe.controllers.TrashController;
 import it.unisalento.pas.wastedisposalagencybe.domains.Trash;
 import it.unisalento.pas.wastedisposalagencybe.domains.WasteStatistics;
-import it.unisalento.pas.wastedisposalagencybe.dto.TrashDTO;
-import it.unisalento.pas.wastedisposalagencybe.dto.WasteStatisticsDTO;
 import it.unisalento.pas.wastedisposalagencybe.services.ITrashService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
