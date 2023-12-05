@@ -1,7 +1,6 @@
 package it.unisalento.pas.wastedisposalagencybe.controllersTest;
 
 import com.nimbusds.jose.shaded.gson.Gson;
-import it.unisalento.pas.wastedisposalagencybe.configurations.SecurityConstants;
 import it.unisalento.pas.wastedisposalagencybe.domains.User;
 import it.unisalento.pas.wastedisposalagencybe.dto.UserDTO;
 import it.unisalento.pas.wastedisposalagencybe.services.UserService;
@@ -36,7 +35,7 @@ public class UserControllerTest {
         when(userService.existUser(userID)).thenReturn(1);
 
         mockMvc.perform(get("/api/user/exist/{userID}", userID)
-                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
+                        .with(user("operator").authorities(new SimpleGrantedAuthority("ROLE_OPERATOR"))))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
     }
@@ -57,7 +56,7 @@ public class UserControllerTest {
         mockMvc.perform(post("/api/user/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
+                        .with(user("operator").authorities(new SimpleGrantedAuthority("ROLE_OPERATOR"))))
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"message\": \"User created successfully\"}"));
     }
@@ -78,7 +77,7 @@ public class UserControllerTest {
         mockMvc.perform(post("/api/user/update")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
+                        .with(user("operator").authorities(new SimpleGrantedAuthority("ROLE_OPERATOR"))))
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"message\": \"User updated successfully\"}"));
     }
@@ -90,7 +89,7 @@ public class UserControllerTest {
         when(userService.deleteUser(userID)).thenReturn(0);
 
         mockMvc.perform(delete("/api/user/delete/{userID}", userID)
-                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
+                        .with(user("operator").authorities(new SimpleGrantedAuthority("ROLE_OPERATOR"))))
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"message\": \"User deleted successfully\"}"));
     }
@@ -107,7 +106,7 @@ public class UserControllerTest {
         when(userService.findByID(userID)).thenReturn(user);
 
         mockMvc.perform(get("/api/user/get/{userID}", userID)
-                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
+                        .with(user("operator").authorities(new SimpleGrantedAuthority("ROLE_OPERATOR"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("John"))
                 .andExpect(jsonPath("$.surname").value("Doe"))

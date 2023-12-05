@@ -5,6 +5,7 @@ import it.unisalento.pas.wastedisposalagencybe.dto.AlertDTO;
 import it.unisalento.pas.wastedisposalagencybe.services.IAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +31,7 @@ public class AlertController {
      * @return ResponseEntity con lo stato HTTP OK e una lista di notifiche di allarme in formato JSON
      */
     @GetMapping("/get/all")
+    @PreAuthorize("hasRole('OPERATOR')")
     public ResponseEntity<ArrayList<AlertDTO>> getAllCapacityAlerts() {
         ArrayList<Alert> alertList = alertService.getAllAlerts();
         ArrayList<AlertDTO> alertListDTO = new ArrayList<>();

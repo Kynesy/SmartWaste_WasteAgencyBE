@@ -7,6 +7,7 @@ import it.unisalento.pas.wastedisposalagencybe.dto.WasteStatisticsDTO;
 import it.unisalento.pas.wastedisposalagencybe.services.ITrashService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class TrashController {
      * @return ResponseEntity con lo stato HTTP OK e una lista di notifiche dei rifiuti in formato JSON
      */
     @GetMapping("/notifications/user/{userID}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ArrayList<TrashDTO>> getTrashByUserId(@PathVariable String userID) {
         ArrayList<Trash> trashList = new ArrayList<>(trashService.getTrashNotificationByUserID(userID));
         ArrayList<TrashDTO> trashListDTO = new ArrayList<>();
@@ -52,6 +54,7 @@ public class TrashController {
      * @return ResponseEntity con lo stato HTTP OK e le statistiche dei rifiuti in formato JSON
      */
     @GetMapping("/statistics/user/{userID}/{year}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<WasteStatisticsDTO> getStatisticsByUserId(@PathVariable String userID, @PathVariable int year) {
         WasteStatistics statistics = trashService.getUserStatistics(userID, year);
         WasteStatisticsDTO statisticsDTO = fromStatisticsToStatisticsDTO(statistics);
@@ -67,6 +70,7 @@ public class TrashController {
      * @return ResponseEntity con lo stato HTTP OK e una lista di statistiche dei rifiuti in formato JSON
      */
     @PostMapping("/statistics/user/all/{year}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ArrayList<WasteStatisticsDTO>> getStatisticsByUserId(@RequestBody ArrayList<String> idList, @PathVariable int year) {
         ArrayList<WasteStatisticsDTO> statListDTO = new ArrayList<>();
         for (String id : idList) {
@@ -85,6 +89,7 @@ public class TrashController {
      * @return ResponseEntity con lo stato HTTP OK e le statistiche dei rifiuti della città in formato JSON
      */
     @GetMapping("/statistics/city/{year}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<WasteStatisticsDTO> getCityStatistics(@PathVariable int year) {
         WasteStatistics statistics = trashService.getCityStatistics(year);
         WasteStatisticsDTO statisticsDTO = fromStatisticsToStatisticsDTO(statistics);

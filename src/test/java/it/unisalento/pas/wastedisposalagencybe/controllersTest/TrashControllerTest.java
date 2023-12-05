@@ -1,7 +1,6 @@
 package it.unisalento.pas.wastedisposalagencybe.controllersTest;
 
 import com.nimbusds.jose.shaded.gson.Gson;
-import it.unisalento.pas.wastedisposalagencybe.configurations.SecurityConstants;
 import it.unisalento.pas.wastedisposalagencybe.domains.Trash;
 import it.unisalento.pas.wastedisposalagencybe.domains.WasteStatistics;
 import it.unisalento.pas.wastedisposalagencybe.services.ITrashService;
@@ -42,7 +41,7 @@ public class TrashControllerTest {
         when(trashService.getTrashNotificationByUserID(userID)).thenReturn(trashList);
 
         mockMvc.perform(get("/api/trash/notifications/user/{userID}", userID)
-                        .with(user("user").authorities(new SimpleGrantedAuthority(SecurityConstants.USER_ROLE_ID))))
+                        .with(user("user").authorities(new SimpleGrantedAuthority("ROLE_USER"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("mockID"));
     }
@@ -60,7 +59,7 @@ public class TrashControllerTest {
         when(trashService.getUserStatistics(userID, year)).thenReturn(statistics);
 
         mockMvc.perform(get("/api/trash/statistics/user/{userID}/{year}", userID, year)
-                        .with(user("user").authorities(new SimpleGrantedAuthority(SecurityConstants.USER_ROLE_ID))))
+                        .with(user("user").authorities(new SimpleGrantedAuthority("ROLE_USER"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId").value(userID))
                 .andExpect(jsonPath("$.year").value(year));
@@ -85,7 +84,7 @@ public class TrashControllerTest {
         mockMvc.perform(post("/api/trash/statistics/user/all/{year}", year)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-                        .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
+                        .with(user("admin").authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].userId").value("mockUserID"))
                 .andExpect(jsonPath("$[0].year").value(year));
@@ -100,7 +99,7 @@ public class TrashControllerTest {
         when(trashService.getCityStatistics(year)).thenReturn(statistics);
 
         mockMvc.perform(get("/api/trash/statistics/city/{year}", year)
-                        .with(user("admin").authorities(new SimpleGrantedAuthority(SecurityConstants.ADMIN_ROLE_ID))))
+                        .with(user("admin").authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.year").value(year));
     }

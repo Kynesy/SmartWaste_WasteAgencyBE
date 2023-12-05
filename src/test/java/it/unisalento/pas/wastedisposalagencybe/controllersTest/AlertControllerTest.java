@@ -1,10 +1,6 @@
 package it.unisalento.pas.wastedisposalagencybe.controllersTest;
 
-import com.nimbusds.jose.shaded.gson.Gson;
-import it.unisalento.pas.wastedisposalagencybe.configurations.SecurityConstants;
-import it.unisalento.pas.wastedisposalagencybe.controllers.AlertController;
 import it.unisalento.pas.wastedisposalagencybe.domains.Alert;
-import it.unisalento.pas.wastedisposalagencybe.dto.AlertDTO;
 import it.unisalento.pas.wastedisposalagencybe.services.IAlertService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +40,7 @@ public class AlertControllerTest {
         when(alertService.getAllAlerts()).thenReturn(alertList);
 
         mockMvc.perform(get("/api/alert/get/all")
-                        .with(user("operator").authorities(new SimpleGrantedAuthority(SecurityConstants.OPERATOR_ROLE_ID))))
+                        .with(user("operator").authorities(new SimpleGrantedAuthority("ROLE_OPERATOR"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("mockAlertID"))
                 .andExpect(jsonPath("$[0].timestamp").value("2023-10-06T10:00:00Z"))
