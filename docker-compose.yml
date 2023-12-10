@@ -19,7 +19,7 @@ services:
     image: openjdk:17-jdk-alpine
     container_name: wasteDisposalAgencyBE
     ports:
-      - "8081:8080"
+      - "80:8080"
       - "8001:8000"
     expose:
       - "8001"
@@ -37,7 +37,7 @@ services:
     image: mongo:5.0
     container_name: wasteDisposalAgencyDB
     ports:
-      - "27018:27017"
+      - "27017:27017"
     networks:
       - wasteDisposalAgencyNetwork
 
