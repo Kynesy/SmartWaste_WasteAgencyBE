@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -74,7 +75,11 @@ public class TrashService implements ITrashService {
         WasteStatistics wasteStatistics = new WasteStatistics();
         wasteStatistics.setTotalSortedWaste(0);
         wasteStatistics.setTotalUnsortedWaste(0);
-        for (Trash trash : trashList) {
+
+        Iterator<Trash> iterator = trashList.iterator();
+
+        while(iterator.hasNext()){
+            Trash trash = iterator.next();
             wasteStatistics.setTotalUnsortedWaste(wasteStatistics.getTotalUnsortedWaste() + trash.getUnsortedWaste());
             wasteStatistics.setTotalSortedWaste(wasteStatistics.getTotalSortedWaste() + trash.getSortedWaste());
         }

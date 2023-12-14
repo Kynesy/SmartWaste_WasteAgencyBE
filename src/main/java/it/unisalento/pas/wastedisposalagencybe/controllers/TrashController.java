@@ -2,8 +2,7 @@ package it.unisalento.pas.wastedisposalagencybe.controllers;
 
 import it.unisalento.pas.wastedisposalagencybe.domains.Trash;
 import it.unisalento.pas.wastedisposalagencybe.domains.WasteStatistics;
-import it.unisalento.pas.wastedisposalagencybe.dto.TrashDTO;
-import it.unisalento.pas.wastedisposalagencybe.dto.WasteStatisticsDTO;
+import it.unisalento.pas.wastedisposalagencybe.dto.*;
 import it.unisalento.pas.wastedisposalagencybe.services.ITrashService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Controller che gestisce le operazioni relative ai rifiuti (trash) e alle statistiche dei rifiuti.
@@ -38,7 +38,10 @@ public class TrashController {
         ArrayList<Trash> trashList = new ArrayList<>(trashService.getTrashNotificationByUserID(userID));
         ArrayList<TrashDTO> trashListDTO = new ArrayList<>();
 
-        for (Trash trash : trashList) {
+
+        Iterator<Trash> iterator = trashList.iterator();
+        while(iterator.hasNext()){
+            Trash trash = iterator.next();
             TrashDTO trashDTO = fromTrashToTrashDTO(trash);
             trashListDTO.add(trashDTO);
         }
@@ -73,7 +76,11 @@ public class TrashController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ArrayList<WasteStatisticsDTO>> getStatisticsByUserId(@RequestBody ArrayList<String> idList, @PathVariable int year) {
         ArrayList<WasteStatisticsDTO> statListDTO = new ArrayList<>();
-        for (String id : idList) {
+
+        Iterator<String> iterator = idList.iterator();
+
+        while(iterator.hasNext()){
+            String id = iterator.next();
             WasteStatistics statistics = trashService.getUserStatistics(id, year);
             WasteStatisticsDTO statisticsDTO = fromStatisticsToStatisticsDTO(statistics);
             statListDTO.add(statisticsDTO);
@@ -121,7 +128,8 @@ public class TrashController {
      * @return Oggetto TrashDTO convertito
      */
     private TrashDTO fromTrashToTrashDTO(Trash trash) {
-        TrashDTO trashDTO = new TrashDTO();
+        IWasteFactory wasteFactory = new WasteFactory();
+        TrashDTO trashDTO = (TrashDTO) wasteFactory.getWasteType(WasteType.SORTED_UNSORTED);
 
         trashDTO.setId(trash.getId());
         trashDTO.setTimestamp(trash.getTimestamp());
