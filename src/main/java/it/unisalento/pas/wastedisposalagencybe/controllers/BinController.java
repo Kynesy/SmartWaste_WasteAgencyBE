@@ -2,6 +2,9 @@ package it.unisalento.pas.wastedisposalagencybe.controllers;
 
 import it.unisalento.pas.wastedisposalagencybe.domains.Bin;
 import it.unisalento.pas.wastedisposalagencybe.dto.BinDTO;
+import it.unisalento.pas.wastedisposalagencybe.dto.ContainerFactory;
+import it.unisalento.pas.wastedisposalagencybe.dto.IContainerFactory;
+import it.unisalento.pas.wastedisposalagencybe.dto.WasteType;
 import it.unisalento.pas.wastedisposalagencybe.services.IBinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -127,7 +130,8 @@ public class BinController {
      * @return Oggetto BinDTO convertito
      */
     private BinDTO fromBinToBinDTO(Bin bin) {
-        BinDTO binDTO = new BinDTO();
+        IContainerFactory containerFactory = new ContainerFactory();
+        BinDTO binDTO = (BinDTO) containerFactory.getContainerType(WasteType.SORTED_UNSORTED);
 
         binDTO.setId(bin.getId());
         binDTO.setCapacity(bin.getCapacity());

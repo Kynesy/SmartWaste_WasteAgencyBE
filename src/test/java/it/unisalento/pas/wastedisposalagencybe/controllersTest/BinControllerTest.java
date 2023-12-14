@@ -3,6 +3,9 @@ package it.unisalento.pas.wastedisposalagencybe.controllersTest;
 import com.nimbusds.jose.shaded.gson.Gson;
 import it.unisalento.pas.wastedisposalagencybe.domains.Bin;
 import it.unisalento.pas.wastedisposalagencybe.dto.BinDTO;
+import it.unisalento.pas.wastedisposalagencybe.dto.ContainerFactory;
+import it.unisalento.pas.wastedisposalagencybe.dto.IContainerFactory;
+import it.unisalento.pas.wastedisposalagencybe.dto.WasteType;
 import it.unisalento.pas.wastedisposalagencybe.services.IBinService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +33,11 @@ public class BinControllerTest {
     @MockBean
     private IBinService binService;
 
+    private final IContainerFactory containerFactory = new ContainerFactory();
+
     @Test
     void createBinTest_Success() throws Exception {
-        BinDTO binDTO = new BinDTO();
+        BinDTO binDTO = (BinDTO) containerFactory.getContainerType(WasteType.SORTED_UNSORTED);
         binDTO.setId("mockID");
         Gson gson = new Gson();
         String json = gson.toJson(binDTO);
@@ -49,7 +54,7 @@ public class BinControllerTest {
 
     @Test
     void createBinTest_Failure() throws Exception {
-        BinDTO binDTO = new BinDTO();
+        BinDTO binDTO = (BinDTO) containerFactory.getContainerType(WasteType.SORTED_UNSORTED);
         binDTO.setId("mockID");
         Gson gson = new Gson();
         String json = gson.toJson(binDTO);
@@ -66,7 +71,7 @@ public class BinControllerTest {
 
     @Test
     void updateBinTest_Success() throws Exception {
-        BinDTO binDTO = new BinDTO();
+        BinDTO binDTO = (BinDTO) containerFactory.getContainerType(WasteType.SORTED_UNSORTED);
         binDTO.setId("mockID");
         Gson gson = new Gson();
         String json = gson.toJson(binDTO);
@@ -83,7 +88,7 @@ public class BinControllerTest {
 
     @Test
     void updateBinTest_Failure() throws Exception {
-        BinDTO binDTO = new BinDTO();
+        BinDTO binDTO = (BinDTO) containerFactory.getContainerType(WasteType.SORTED_UNSORTED);
         binDTO.setId("mockID");
         Gson gson = new Gson();
         String json = gson.toJson(binDTO);

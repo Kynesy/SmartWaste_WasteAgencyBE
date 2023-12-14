@@ -7,12 +7,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class BinDTO {
-    private String id;
-    private float latitude;
-    private float longitude;
+public class BinDTO extends Container{
     private int capacity;
     private int sortedWaste;
     private int unsortedWaste;
-    private int alertLevel;
 }
